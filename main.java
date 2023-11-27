@@ -212,17 +212,91 @@ public class Main {
             for (int x = 0; x < 16; x++) {
                 int row = x / 4 + 1;
                 int col = x % 4 + 1;
+                if (grid[row][col] != 0)
+                    continue;
+                ArrayList<Integer> _estimations = getEstimations(estimations, row, col);
+                if (_estimations.size() == 1)
+                    fillCell(grid, estimations, row, col, _estimations.get(0));
+
+            }
+            /* 
+            for (int number = 1; number < 5; number++) {
+                for (int row = 1; row < 5; row++) {
+                    int count = 0;
+                    int last_J = 0;
+                    for (int j = 1; j < 5; j++) {
+                        if (estimations[row][j][number] > 0) {
+                            count++;
+                            last_J = j;
+                        }
+                    }
+                    if (count == 1)
+                        fillCell(grid, estimations, row, last_J, number);
+                }
+                for (int col = 1; col < 5; col++) {
+                    int count = 0;
+                    int last_J = 0;
+                    for (int j = 1; j < 5; j++) {
+                        if (estimations[j][col][number] >0) {
+                            count++;
+                            last_J = j;
+                        }
+                    }
+                    if (count == 1)
+                        fillCell(grid, estimations, last_J, col, number);
+                }
+
+            }
+            */
+        }
+        for (int row = 1; row < 5; row++) {
+            ArrayList<Integer> emptyCells = new ArrayList<>();
+            int count = 0;
+            for (int col = 1; col < 5; col++) {
                 if (grid[row][col] == 0) {
-                    ArrayList<Integer> _estimations = getEstimations(estimations, row, col);
-                    if (_estimations.size() == 1)
-                        fillCell(grid, estimations, row, col, _estimations.get(0));
+                    if (emptyCells.size() == 0) {
+                        for (int j = 1; j < 5; j++) {
+                            if (estimations[row][col][j] > 0)
+                                emptyCells.add(j);
+                        }
+                    }
+                    count++;
+                }
+            }
+            if (emptyCells.size() == 2 && count == 2) {
+                int nuOfSuccess = 0;
+                int[] rowVectorWorked = new int[6];
+                for (int kk = 0; kk < 2; kk++) {
+                    System.out.println("Attempt " + kk);
+                    int indexOfEstimate = kk;
+                    int[] rowVector = new int[6];
+                    for (int j = 0; j < 6; j++) {
+                        if (indexOfEstimate == 2)
+                            indexOfEstimate = 0;
+                        if (grid[row][j] != 0 || j == 0 || j == 5)
+                            rowVector[j] = grid[row][j];
+                        else
+                            rowVector[j] = emptyCells.get(indexOfEstimate++);
+                    }
+                    if (CheckVector(rowVector))
+                    {
+                        rowVectorWorked = rowVector;
+                        nuOfSuccess++;
+                    }
+
+                }
+                if (nuOfSuccess == 1) {
+                    for (int mm = 1; mm < 5; mm++) {
+                        fillCell(grid, estimations, row, mm, rowVectorWorked[mm]);
+                    }
+
                 }
             }
         }
-        
+
     }
-        
-        
+
+
     public static void main(String[] args) {
         ArrayList<String> skyscrappers = new ArrayList<>();
         /*       4 3 2 1 
@@ -239,9 +313,10 @@ public class Main {
         skyscrappers.add("2 4 2 1 2 1 2 4 3 3 1 2 1 2 3 3");
         skyscrappers.add("4 1 2 2 1 4 2 2 2 3 2 1 2 1 2 3");
 
-        for (int i = 0; i < skyscrappers.size(); i++) {
-
-            int[][] grid = getGrid(skyscrappers.get(i));
+        for (int i = 0; i < skyscrappers.size(); i++)
+        {
+            
+            int[][]   grid        = getGrid(skyscrappers.get(i));
             int[][][] estimations = getEstimations();
 
             TakeEasyShots(grid, estimations);
