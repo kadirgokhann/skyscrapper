@@ -219,7 +219,6 @@ public class Main {
                     fillCell(grid, estimations, row, col, _estimations.get(0));
 
             }
-            /* 
             for (int number = 1; number < 5; number++) {
                 for (int row = 1; row < 5; row++) {
                     int count = 0;
@@ -247,7 +246,6 @@ public class Main {
                 }
 
             }
-            */
         }
         for (int row = 1; row < 5; row++) {
             ArrayList<Integer> emptyCells = new ArrayList<>();
